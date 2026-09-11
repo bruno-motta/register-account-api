@@ -1,0 +1,6 @@
+package com.bruno_motta.account.entity.enums;
+
+public enum UserRole {
+    ROLE_USER,
+    ROLE_ADMIN
+}
