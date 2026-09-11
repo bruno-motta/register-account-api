@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
-import com.bruno_motta.account.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -32,13 +31,13 @@ public class TokenService {
                 .build();
     }
 
-    public String generateToken(User user) {
+    public String generateToken(UserDetailsImpl userDetails) {
         Instant expiration = Instant.now().plus(TOKEN_EXPIRATION_HOURS, ChronoUnit.HOURS);
 
         return JWT.create()
                 .withIssuer(issuer)
-                .withSubject(user.getEmail())
-                .withClaim("role", user.getRole().name())
+                .withSubject(userDetails.getUsername())
+                .withClaim("role", userDetails.getAuthorities().iterator().next().getAuthority())
                 .withIssuedAt(new Date())
                 .withExpiresAt(Date.from(expiration))
                 .sign(algorithm);
